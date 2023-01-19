@@ -6,16 +6,17 @@ local services = setmetatable({}, {
 
 local client = services.Players.LocalPlayer
 local moves = services.ReplicatedStorage[client.UserId .. "Client"]
+local Players = game:GetService("Players")
 local Cancel = true
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
 local Window = Rayfield:CreateWindow({
-    Name = "Andromeda V0.1 BETA",
+    Name = "Andromeda V0.2 BETA",
     LoadingTitle = "One of the working script for EGG Lol",
     LoadingSubtitle = "by InfLed",
     ConfigurationSaving = {
        Enabled = false,
        FolderName = Andromeda, 
-       FileName = "AndromedaV0.1"
+       FileName = "AndromedaV0.2"
     },
     Discord = {
        Enabled = false,
@@ -46,9 +47,93 @@ local Window = Rayfield:CreateWindow({
              workspace.Gravity = 196.2
          end
      end
- end})
+     end
+ })
+local function Warning()
+Rayfield:Notify({
+   Title = "Warning!",
+   Content = "This script might be glitchy and Auto-Moves can work incorrect!",
+   Duration = 6.5,
+   Image = 4384403012,
+   Actions = { 
+      Ignore = {
+         Name = "noob fix your script",
+         Callback = function()
+         print("Script might work incorrectly, make sure to press fix button on rejoin button!")
+      end
+   },
+},
+})
+local Button = Tab:CreateButton({
+   Name = "Respawn",
+   Callback = function()
+       client.Character.Humanoid.Health = 0
+       end
+})
+local Button = Tab:CreateButton({
+    Name = "Rejoin",
+    Callback = function()
+        game:GetService'TeleportService':TeleportToPlaceInstance(game.PlaceId,game.JobId,game:GetService'Players'.LocalPlayer)
+    end
+    
+})
+local Tab = Window:CreateTab("Local", 6961018885)
+local SliderWalk = Tab:CreateSlider({
+   Name = "WalkSpeed",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "",
+   CurrentValue = 16,
+   Flag = "SliderWalkspeed",
+   Callback = function(Value)
+   game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value
+   end,
+})
 
+local SliderJump = Tab:CreateSlider({
+   Name = "JumpPower",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "",
+   CurrentValue = 50,
+   Flag = "SliderJumppower", 
+   Callback = function(Value)
+   game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value
+   end,
+})
+
+local SliderGravity = Tab:CreateSlider({
+   Name = "Gravity",
+   Range = {0, 1000},
+   Increment = 1,
+   Suffix = "",
+   CurrentValue = 196,
+   Flag = "SliderGravityNumber", 
+   Callback = function(Value)
+   workspace.Gravity = Value
+   end,
+})
+
+local Tab = Window:CreateTab("Credits")
+local Label = Tab:CreateLabel("Script made by InfLed#0001")
+local Label = Tab:CreateLabel("This is basically remake of vozoid#1346's script")
  --//functions
+local GC = getconnections or get_signal_cons
+	if GC then
+		for i,v in pairs(GC(Players.LocalPlayer.Idled)) do
+			if v["Disable"] then
+				v["Disable"](v)
+			elseif v["Disconnect"] then
+				v["Disconnect"](v)
+			end
+		end
+	else
+		Players.LocalPlayer.Idled:Connect(function()
+			local VirtualUser = game:GetService("VirtualUser")
+			VirtualUser:CaptureController()
+			VirtualUser:ClickButton2(Vector2.new())
+		end)
+	end
 local function domoves()
     for _, move in next, client.Backpack:GetChildren() do
         move = tostring(move):split(" (")[1]
@@ -75,6 +160,8 @@ while task.wait(0.5) do
             task.wait(8)
             startgame()
             
+            end
         end
     end
 end
+Warning()
