@@ -1,6 +1,66 @@
-while(true) do
-	local Material = math.huge
+local services = setmetatable({}, {
+    __index = function(_, service)
+        return game:GetService(service)
+    end
+})
+
+local client = services.Players.LocalPlayer
+local moves = services.ReplicatedStorage[client.UserId .. "Client"]
+local Cancel = true
+local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
+local Window = Rayfield:CreateWindow({
+    Name = "Andromeda V0.2 BETA",
+    LoadingTitle = "One of the idiotic script for EGG haha",
+    LoadingSubtitle = "by Bruhfled",
+    ConfigurationSaving = {
+       Enabled = false,
+       FolderName = Andromeda, 
+       FileName = "AndromedaV0.2"
+    },
+    Discord = {
+       Enabled = false,
+       Invite = "ABCD", -- The Discord invite code, do not include discord.gg/
+       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+    },
+    KeySystem = false, -- Set this to true to use our key system
+    KeySettings = {
+       Title = "Srsly",
+       Subtitle = "who is using this shit",
+       Note = "#NOKEYS",
+       FileName = "lol",
+       SaveKey = true,
+       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+       Key = "Hello nibba"
+    }
+ })
+ local Tab = Window:CreateTab("Main", 4483362458)
+ local Section = Tab:CreateSection("Autofarm")
+ local Toggle = Tab:CreateToggle({
+     Name = "Auto-Moves",
+     CurrentValue = false,
+     Flag = "MovesReal", 
+     Callback = function(value)
+      if value == false then 
+         if client.Character and client.Character:FindFirstChild("Humanoid") then
+             client.Character.Humanoid.Health = 0
+             workspace.Gravity = 196.2
+         end
+     end
+ end})
+
+ --//functions
+local function Autofarming()
+    while(true) do
+        local Material = math.huge
         for i=1, Material do
         print("client.Character and client.Character:FindFirstChild")
         end
         end
+end
+--//main loop
+
+while task.wait(0.5) do
+    if Toggle.CurrentValue then
+        Autofarming()
+    end
+end
