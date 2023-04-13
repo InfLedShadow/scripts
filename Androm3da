@@ -1,66 +1,61 @@
-local services = setmetatable({}, {
-    __index = function(_, service)
-        return game:GetService(service)
-    end
-})
-
+local services = setmetatable({}, {__index = function(_, service) return game:GetService(service)end })
 local client = services.Players.LocalPlayer
 local moves = services.ReplicatedStorage[client.UserId .. "Client"]
-local Cancel = true
+local Players = game:GetService("Players")
 local Rayfield = loadstring(game:HttpGet('https://raw.githubusercontent.com/shlexware/Rayfield/main/source'))()
-local Window = Rayfield:CreateWindow({
-    Name = "Andromeda V0.2 BETA",
-    LoadingTitle = "One of the idiotic script for EGG haha",
-    LoadingSubtitle = "by Bruhfled",
-    ConfigurationSaving = {
-       Enabled = false,
-       FolderName = Andromeda, 
-       FileName = "AndromedaV0.2"
-    },
-    Discord = {
-       Enabled = false,
-       Invite = "ABCD", -- The Discord invite code, do not include discord.gg/
-       RememberJoins = true -- Set this to false to make them join the discord every time they load it up
-    },
-    KeySystem = false, -- Set this to true to use our key system
-    KeySettings = {
-       Title = "Srsly",
-       Subtitle = "who is using this shit",
-       Note = "#NOKEYS",
-       FileName = "lol",
-       SaveKey = true,
-       GrabKeyFromSite = false, -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
-       Key = "Hello nibba"
-    }
- })
- local Tab = Window:CreateTab("Main", 4483362458)
- local Section = Tab:CreateSection("Autofarm")
- local Toggle = Tab:CreateToggle({
-     Name = "Auto-Moves",
-     CurrentValue = false,
-     Flag = "MovesReal", 
-     Callback = function(value)
-      if value == false then 
-         if client.Character and client.Character:FindFirstChild("Humanoid") then
-             client.Character.Humanoid.Health = 0
-             workspace.Gravity = 196.2
-         end
-     end
- end})
-
- --//functions
-local function Autofarming()
-    while(true) do
-        local Material = math.huge
-        for i=1, Material do
-        print("client.Character and client.Character:FindFirstChild")
-        end
-        end
-end
---//main loop
-
+local Window = Rayfield:CreateWindow({Name = "Andromeda V0.2499999999999999 BETA",LoadingTitle = "One of the working script for EGG Lol",LoadingSubtitle = "by InfLed",ConfigurationSaving = {Enabled = false,FolderName = Andromeda, FileName = "AndromedaV0.2"},Discord = {Enabled = false,Invite = "",RememberJoins = true},KeySystem = false,KeySettings = {Title = "",Subtitle = "",Note = "",FileName = "",SaveKey = true,GrabKeyFromSite = false,Key = ""}})
+--//Mainp
+local Tab = Window:CreateTab("Main", 4483362458)
+local Section = Tab:CreateSection("Autofarm")
+local Toggle = Tab:CreateToggle({Name = "Auto-Moves",CurrentValue = false,Flag = "MovesReal", Callback = function(value) if value == false then if client.Character and client.Character:FindFirstChild("Humanoid") then client.Character.Humanoid.Health = 0 workspace.Gravity = 196.2 end end end})
+local Button = Tab:CreateButton({Name = "Respawn",Callback = function() client.Character.Humanoid.Health = 0 end})
+local Button = Tab:CreateButton({Name = "Rejoin",Callback = function() game:GetService'TeleportService':TeleportToPlaceInstance(game.PlaceId,game.JobId,game:GetService'Players'.LocalPlayer) end})
+local Button = Tab:CreateButton({Name = "Serverhop",Callback = function() local Http = game:GetService("HttpService")local TPS = game:GetService("TeleportService") local Api = "https://games.roblox.com/v1/games/" local _place = game.PlaceId local _servers = Api.._place.."/servers/Public?sortOrder=Asc&limit=100" function ListServers(cursor) local Raw = game:HttpGet(_servers .. ((cursor and "&cursor="..cursor) or "")) return Http:JSONDecode(Raw)  end local Server, Next; repeat local Servers = ListServers(Next) Server = Servers.data[1] Next = Servers.nextPageCursor until Server TPS:TeleportToPlaceInstance(_place,Server.id,game.Players.LocalPlayer) end})
+local Input = Tab:CreateInput({Name = "Teleport to player",PlaceholderText = "Enter an username...",RemoveTextAfterFocusLost = false,Callback = function(Text) p1 = game.Players.LocalPlayer.Character.HumanoidRootPart p2 = Text for i,v in pairs(Players:GetPlayers()) do if v ~= game.Players.LocalPlayer.Name  then p1.CFrame = game.Players[p2].Character.HumanoidRootPart.CFrame end end end})
+--//Local player settings
+local Tab = Window:CreateTab("Local", 6961018885)
+local SliderWalk = Tab:CreateSlider({Name = "WalkSpeed",Range = {0, 1000},Increment = 1,Suffix = "",CurrentValue = 16,Flag = "SliderWalkspeed",Callback = function(Value) game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = Value end})
+local SliderJump = Tab:CreateSlider({Name = "JumpPower",Range = {0, 1000},Increment = 1,Suffix = "",CurrentValue = 50,Flag = "SliderJumppower",Callback = function(Value) game.Players.LocalPlayer.Character.Humanoid.JumpPower = Value end})
+local SliderGravity = Tab:CreateSlider({Name = "Gravity",Range = {0, 1000},Increment = 1,Suffix = "",CurrentValue = 196,Flag = "SliderGravityNumber", Callback = function(Value)workspace.Gravity = Value end})
+--//Credits
+local Tab = Window:CreateTab("Credits")
+local Label = Tab:CreateLabel("Script made by InfLed#0001")
+local Label = Tab:CreateLabel("This is basically remake of vozoid#1346's script")
+--//Functions
+local function Warning() --WarningNotification
+    Rayfield:Notify({Title = "Warning!",Content = "This script might be glitchy and Auto-Moves work incorrect!",Duration = 6.5,Image = 4384403012,Actions = {Ignore = {Name = "noob fix your script",Callback = function() print("If there's any problems with script, try to press Respawn or Rejoin button, srry for bugs lol") end}}})
+--//AntiIdle
+local GC = getconnections or get_signal_cons
+	if GC then
+        for i,v in pairs(GC(Players.LocalPlayer.Idled)) do
+			if v["Disable"] then
+				v["Disable"](v)
+			elseif v["Disconnect"] then
+				v["Disconnect"](v) end end
+	else
+		Players.LocalPlayer.Idled:Connect(function()
+			local VirtualUser = game:GetService("VirtualUser")
+			VirtualUser:CaptureController()
+			VirtualUser:ClickButton2(Vector2.new()) end)end
+local function domoves()
+    for _, move in next, client.Backpack:GetChildren() do
+        move = tostring(move):split(" (")[1]
+        moves.StartMove:FireServer(move)
+        moves.EndMove:FireServer(move) end end
+local function startgame() 
+    services.ReplicatedStorage.Client.Teleport:InvokeServer()
+    services.ReplicatedStorage.Client.Intro:InvokeServer()
+    workspace.CurrentCamera.CameraType = Enum.CameraType.Custom
+    workspace.CurrentCamera.CameraSubject = client.Character.Humanoid
+    client.PlayerGui.IntroGui.Enabled = false
+    client.PlayerGui.Spinner.Enabled = false
+    client.PlayerGui.StatsGui.Enabled = true end
+--//Loop
 while task.wait(0.5) do
     if Toggle.CurrentValue then
-        Autofarming()
-    end
-end
+        workspace.Gravity = 100000
+        domoves()
+        if Toggle.CurrentValue and client.Character.Humanoid.Health == 0 then
+            task.wait(8)
+            startgame() end end end end
+Warning()
